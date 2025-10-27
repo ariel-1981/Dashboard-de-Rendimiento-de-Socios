@@ -9,14 +9,26 @@ st.title("💪 Dashboard de Rendimiento Físico de Socios")
 # --- CARGA DE DATOS DESDE GITHUB ---
 @st.cache_data
 def cargar_datos():
+    # URL del archivo raw en GitHub
     url = "https://raw.githubusercontent.com/ariel-1981/Dashboard-de-Rendimiento-de-Socios/refs/heads/main/datos.csv"
     
     try:
         df = pd.read_csv(url)
+        
+        # Debug: mostrar columnas disponibles
+        st.sidebar.info(f"Columnas encontradas: {', '.join(df.columns.tolist())}")
+        
+        # Verificar que existan las columnas necesarias
+        columnas_requeridas = ["Peso_Inicial", "Peso_Actual"]
+        if not all(col in df.columns for col in columnas_requeridas):
+            st.error(f"Faltan columnas requeridas. Columnas disponibles: {df.columns.tolist()}")
+            return pd.DataFrame()
+        
         df["Progreso_Peso (%)"] = ((df["Peso_Inicial"] - df["Peso_Actual"]) / df["Peso_Inicial"]) * 100
         return df
     except Exception as e:
         st.error(f"Error al cargar datos desde GitHub: {e}")
+        st.info("Asegúrate de que la URL apunta al archivo raw correcto en GitHub")
         return pd.DataFrame()
 
 df = cargar_datos()
