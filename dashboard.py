@@ -13,10 +13,19 @@ def cargar_datos():
     url = "https://raw.githubusercontent.com/ariel-1981/Dashboard-de-Rendimiento-de-Socios/refs/heads/main/datos.csv"
     
     try:
-        df = pd.read_csv(url)
+        # Intentar con diferentes configuraciones de lectura
+        df = pd.read_csv(url, encoding='utf-8', sep=',')
+        
+        # Si no funcionó, intentar con otro separador
+        if len(df.columns) == 1:
+            df = pd.read_csv(url, encoding='utf-8-sig', sep=',')
+        
+        # Si aún no funciona, intentar con latin-1
+        if len(df.columns) == 1:
+            df = pd.read_csv(url, encoding='latin-1', sep=',')
         
         # Debug: mostrar columnas disponibles
-        st.sidebar.info(f"Columnas encontradas: {', '.join(df.columns.tolist())}")
+        st.sidebar.info(f"Columnas encontradas: {len(df.columns)} columnas")
         
         # Verificar que existan las columnas necesarias
         columnas_requeridas = ["Peso_Inicial", "Peso_Actual"]
