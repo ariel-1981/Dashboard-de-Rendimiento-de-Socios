@@ -2,7 +2,7 @@
 
 Dashboard interactivo desarrollado con Streamlit para análisis y visualización del rendimiento físico de socios de gimnasio.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://tu-app.streamlit.app)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://dashboard-gimnasio.streamlit.app/)
 
 ## 📋 Descripción
 
