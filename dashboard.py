@@ -6,46 +6,101 @@ import plotly.express as px
 st.set_page_config(page_title="Rendimiento Físico del Gimnasio", page_icon="💪", layout="wide")
 st.title("💪 Dashboard de Rendimiento Físico de Socios")
 
-# --- CARGA DE DATOS DESDE GITHUB ---
+# --- DATOS DIRECTAMENTE EN EL CÓDIGO ---
 @st.cache_data
 def cargar_datos():
-    # URL del archivo raw en GitHub
-    url = "https://raw.githubusercontent.com/ariel-1981/Dashboard-de-Rendimiento-de-Socios/refs/heads/main/datos.csv"
+    datos = {
+        'ID': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+               41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+               61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80],
+        'Socio': ['Ana', 'Carlos', 'Lucía', 'Marcos', 'Sofía', 'Julián', 'Paula', 'Tomás', 'Martina', 'Diego',
+                  'Valentina', 'Federico', 'Camila', 'Sebastián', 'Florencia', 'Matías', 'Daniela', 'Facundo', 'Agustina', 'Nicolás',
+                  'Jimena', 'Gonzalo', 'Victoria', 'Ignacio', 'Carolina', 'Ezequiel', 'Aldana', 'Lucas', 'Romina', 'Maximiliano',
+                  'Micaela', 'Rodrigo', 'Brenda', 'Gastón', 'Natalia', 'Leandro', 'Melina', 'Pablo', 'Celeste', 'Mariano',
+                  'Julieta', 'Emiliano', 'Sabrina', 'Adrián', 'Eugenia', 'Claudio', 'Lorena', 'Damián', 'Gabriela', 'Hernán',
+                  'Yanina', 'Cristian', 'Marina', 'Javier', 'Andrea', 'Rubén', 'Valeria', 'Gustavo', 'Silvina', 'Oscar',
+                  'Carla', 'Ramiro', 'Noelia', 'Marcelo', 'Mónica', 'Jorge', 'Roxana', 'Alberto', 'Fernanda', 'Sergio',
+                  'Karina', 'Martín', 'Claudia', 'Ricardo', 'Soledad', 'Daniel', 'Verónica', 'Alejandro', 'Laura', 'Fernando'],
+        'Edad': [25, 32, 28, 40, 22, 35, 30, 27, 26, 31,
+                 24, 29, 33, 38, 23, 34, 27, 26, 31, 36,
+                 25, 39, 28, 30, 32, 27, 24, 35, 29, 41,
+                 26, 33, 23, 37, 30, 28, 25, 34, 27, 40,
+                 24, 31, 29, 36, 26, 38, 32, 27, 25, 35,
+                 28, 39, 30, 33, 24, 37, 26, 41, 29, 34,
+                 27, 31, 23, 36, 32, 28, 25, 38, 30, 35,
+                 26, 40, 29, 33, 24, 37, 31, 28, 25, 34],
+        'Género': ['Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino',
+                   'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino',
+                   'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino',
+                   'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino',
+                   'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino',
+                   'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino',
+                   'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino',
+                   'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino', 'Femenino', 'Masculino'],
+        'Nivel': ['Intermedio', 'Avanzado', 'Principiante', 'Intermedio', 'Intermedio', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio',
+                  'Principiante', 'Intermedio', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio',
+                  'Intermedio', 'Avanzado', 'Principiante', 'Intermedio', 'Avanzado', 'Principiante', 'Intermedio', 'Avanzado', 'Intermedio', 'Principiante',
+                  'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio', 'Intermedio', 'Avanzado',
+                  'Principiante', 'Intermedio', 'Avanzado', 'Principiante', 'Intermedio', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio',
+                  'Principiante', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio', 'Intermedio', 'Avanzado', 'Principiante', 'Intermedio',
+                  'Avanzado', 'Principiante', 'Intermedio', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado',
+                  'Intermedio', 'Principiante', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio', 'Principiante', 'Avanzado', 'Intermedio'],
+        'Frecuencia_Semanal': [5, 4, 6, 2, 6, 3, 5, 3, 6, 3,
+                               4, 5, 5, 3, 5, 4, 6, 4, 5, 3,
+                               5, 4, 6, 4, 5, 3, 6, 4, 5, 2,
+                               6, 4, 5, 3, 5, 4, 6, 3, 5, 4,
+                               6, 3, 5, 4, 6, 4, 5, 3, 6, 4,
+                               5, 3, 5, 4, 6, 3, 5, 4, 6, 3,
+                               5, 4, 6, 4, 5, 3, 6, 4, 5, 3,
+                               5, 2, 6, 4, 5, 4, 5, 3, 6, 4],
+        'Duración_Promedio': [65, 70, 50, 55, 60, 80, 65, 45, 70, 50,
+                              55, 60, 75, 65, 50, 85, 60, 45, 70, 55,
+                              65, 80, 50, 60, 75, 45, 55, 85, 65, 50,
+                              70, 60, 50, 80, 65, 45, 75, 55, 60, 85,
+                              50, 60, 70, 45, 55, 80, 65, 50, 75, 60,
+                              50, 85, 65, 45, 70, 55, 60, 80, 50, 60,
+                              75, 45, 55, 85, 65, 50, 70, 60, 50, 80,
+                              65, 45, 75, 60, 50, 85, 65, 50, 70, 55],
+        'Peso_Inicial': [64, 85, 60, 92, 58, 88, 70, 76, 62, 81,
+                        68, 78, 65, 90, 55, 95, 63, 72, 67, 84,
+                        61, 93, 59, 80, 66, 74, 62, 89, 64, 95,
+                        60, 82, 57, 91, 69, 77, 63, 85, 65, 94,
+                        58, 83, 66, 79, 62, 90, 68, 75, 61, 86,
+                        64, 92, 67, 81, 59, 87, 63, 96, 66, 84,
+                        62, 78, 60, 91, 70, 76, 61, 88, 65, 93,
+                        64, 94, 63, 85, 58, 90, 68, 77, 60, 86],
+        'Peso_Actual': [62, 83, 59, 91, 56, 86, 68, 75, 60, 80,
+                       66, 76, 63, 88, 54, 92, 61, 71, 65, 82,
+                       59, 90, 58, 78, 64, 73, 60, 86, 62, 94,
+                       58, 80, 56, 88, 67, 76, 61, 83, 63, 91,
+                       57, 81, 64, 78, 60, 87, 66, 74, 59, 84,
+                       63, 89, 65, 80, 57, 85, 61, 93, 65, 82,
+                       60, 77, 58, 88, 68, 75, 59, 86, 64, 90,
+                       62, 93, 61, 83, 57, 87, 66, 76, 58, 84],
+        'Ejercicio_Favorito': ['Sentadillas', 'Peso Muerto', 'Correr', 'Bicicleta', 'Correr', 'Press Banca', 'Sentadillas', 'Correr', 'Peso Muerto', 'Bicicleta',
+                              'Yoga', 'Press Banca', 'Sentadillas', 'Bicicleta', 'Correr', 'Peso Muerto', 'Yoga', 'Correr', 'Press Banca', 'Bicicleta',
+                              'Sentadillas', 'Peso Muerto', 'Yoga', 'Press Banca', 'Correr', 'Bicicleta', 'Sentadillas', 'Peso Muerto', 'Yoga', 'Correr',
+                              'Press Banca', 'Bicicleta', 'Sentadillas', 'Peso Muerto', 'Correr', 'Yoga', 'Press Banca', 'Bicicleta', 'Sentadillas', 'Peso Muerto',
+                              'Correr', 'Press Banca', 'Yoga', 'Bicicleta', 'Sentadillas', 'Peso Muerto', 'Correr', 'Press Banca', 'Yoga', 'Bicicleta',
+                              'Sentadillas', 'Peso Muerto', 'Correr', 'Yoga', 'Press Banca', 'Bicicleta', 'Sentadillas', 'Peso Muerto', 'Correr', 'Press Banca',
+                              'Yoga', 'Bicicleta', 'Sentadillas', 'Peso Muerto', 'Correr', 'Press Banca', 'Yoga', 'Bicicleta', 'Sentadillas', 'Peso Muerto',
+                              'Correr', 'Yoga', 'Press Banca', 'Bicicleta', 'Sentadillas', 'Peso Muerto', 'Correr', 'Press Banca', 'Yoga', 'Bicicleta'],
+        'Horario': ['Mañana', 'Tarde', 'Mañana', 'Noche', 'Mañana', 'Tarde', 'Tarde', 'Noche', 'Mañana', 'Tarde',
+                   'Mañana', 'Tarde', 'Mañana', 'Noche', 'Mañana', 'Tarde', 'Tarde', 'Noche', 'Mañana', 'Tarde',
+                   'Mañana', 'Tarde', 'Noche', 'Mañana', 'Tarde', 'Noche', 'Mañana', 'Tarde', 'Tarde', 'Noche',
+                   'Mañana', 'Tarde', 'Mañana', 'Noche', 'Tarde', 'Noche', 'Mañana', 'Tarde', 'Mañana', 'Tarde',
+                   'Noche', 'Mañana', 'Tarde', 'Noche', 'Mañana', 'Tarde', 'Tarde', 'Noche', 'Mañana', 'Tarde',
+                   'Mañana', 'Noche', 'Tarde', 'Noche', 'Mañana', 'Tarde', 'Mañana', 'Tarde', 'Noche', 'Mañana',
+                   'Tarde', 'Noche', 'Mañana', 'Tarde', 'Tarde', 'Noche', 'Mañana', 'Tarde', 'Mañana', 'Noche',
+                   'Tarde', 'Noche', 'Mañana', 'Tarde', 'Mañana', 'Tarde', 'Noche', 'Mañana', 'Tarde', 'Noche']
+    }
     
-    try:
-        # Intentar con diferentes configuraciones de lectura
-        df = pd.read_csv(url, encoding='utf-8', sep=',')
-        
-        # Si no funcionó, intentar con otro separador
-        if len(df.columns) == 1:
-            df = pd.read_csv(url, encoding='utf-8-sig', sep=',')
-        
-        # Si aún no funciona, intentar con latin-1
-        if len(df.columns) == 1:
-            df = pd.read_csv(url, encoding='latin-1', sep=',')
-        
-        # Debug: mostrar columnas disponibles
-        st.sidebar.info(f"Columnas encontradas: {len(df.columns)} columnas")
-        
-        # Verificar que existan las columnas necesarias
-        columnas_requeridas = ["Peso_Inicial", "Peso_Actual"]
-        if not all(col in df.columns for col in columnas_requeridas):
-            st.error(f"Faltan columnas requeridas. Columnas disponibles: {df.columns.tolist()}")
-            return pd.DataFrame()
-        
-        df["Progreso_Peso (%)"] = ((df["Peso_Inicial"] - df["Peso_Actual"]) / df["Peso_Inicial"]) * 100
-        return df
-    except Exception as e:
-        st.error(f"Error al cargar datos desde GitHub: {e}")
-        st.info("Asegúrate de que la URL apunta al archivo raw correcto en GitHub")
-        return pd.DataFrame()
+    df = pd.DataFrame(datos)
+    df["Progreso_Peso (%)"] = ((df["Peso_Inicial"] - df["Peso_Actual"]) / df["Peso_Inicial"]) * 100
+    return df
 
 df = cargar_datos()
-
-# Verificar que los datos se cargaron correctamente
-if df.empty:
-    st.warning("⚠️ No se pudieron cargar los datos. Verifica la URL de GitHub.")
-    st.stop()
 
 # --- SIDEBAR FILTROS ---
 st.sidebar.header("Filtros")
@@ -121,5 +176,3 @@ with col4:
 st.divider()
 st.subheader("📋 Datos Filtrados")
 st.dataframe(df_filtrado, use_container_width=True)
-
-st.caption("Dashboard desarrollado por Santiago Bayaslian 🧠 | Instituto Tecnológico Beltrán")
