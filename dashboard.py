@@ -176,3 +176,5 @@ with col4:
 st.divider()
 st.subheader("📋 Datos Filtrados")
 st.dataframe(df_filtrado, use_container_width=True)
+
+st.caption("Dashboard desarrollado por Ariel Buchholz 🧠 | Instituto Tecnológico Beltrán")
