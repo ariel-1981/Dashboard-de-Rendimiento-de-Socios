@@ -6,14 +6,25 @@ import plotly.express as px
 st.set_page_config(page_title="Rendimiento Físico del Gimnasio", page_icon="💪", layout="wide")
 st.title("💪 Dashboard de Rendimiento Físico de Socios")
 
-# --- CARGA DE DATOS ---
+# --- CARGA DE DATOS DESDE GITHUB ---
 @st.cache_data
 def cargar_datos():
-    df = pd.read_csv("rendimiento_gimnasio.csv")
-    df["Progreso_Peso (%)"] = ((df["Peso_Inicial"] - df["Peso_Actual"]) / df["Peso_Inicial"]) * 100
-    return df
+    url = "https://raw.githubusercontent.com/ariel-1981/Dashboard-de-Rendimiento-de-Socios/refs/heads/main/datos.csv"
+    
+    try:
+        df = pd.read_csv(url)
+        df["Progreso_Peso (%)"] = ((df["Peso_Inicial"] - df["Peso_Actual"]) / df["Peso_Inicial"]) * 100
+        return df
+    except Exception as e:
+        st.error(f"Error al cargar datos desde GitHub: {e}")
+        return pd.DataFrame()
 
 df = cargar_datos()
+
+# Verificar que los datos se cargaron correctamente
+if df.empty:
+    st.warning("⚠️ No se pudieron cargar los datos. Verifica la URL de GitHub.")
+    st.stop()
 
 # --- SIDEBAR FILTROS ---
 st.sidebar.header("Filtros")
